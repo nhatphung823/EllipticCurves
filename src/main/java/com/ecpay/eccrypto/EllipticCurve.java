@@ -17,12 +17,14 @@ import org.bouncycastle.math.ec.ECConstants;
 import org.bouncycastle.math.ec.ECCurve;
 import org.bouncycastle.math.ec.ECFieldElement;
 import org.bouncycastle.math.ec.ECPoint;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 /**
  * Created by Joe on July, 13 2018 .
@@ -166,7 +168,7 @@ public class EllipticCurve {
     int nBitLength = ecDomain.getN().bitLength();
     BigInteger k = new BigInteger(nBitLength, secureRandom);
 
-    while (k.equals(ECConstants.ZERO) || (k.compareTo(ecDomain.getN()) >= 0)) {
+    while (k.compareTo(ECConstants.ZERO) <= 0 || (k.compareTo(ecDomain.getN()) >= 0)) {
       k = new BigInteger(nBitLength, secureRandom);
     }
 
@@ -210,15 +212,15 @@ public class EllipticCurve {
     return bs;
   }
 
-  public ECPoint randomQ(){
+  public ECPoint randomQ() {
     return ecDomain.getG().multiply(randomD());
   }
 
-  public ECPoint getGPoint(){
+  public ECPoint getGPoint() {
     return ecDomain.getG();
   }
 
-  public static EllipticCurve getSecp256k1(){
+  public static EllipticCurve getSecp256k1() {
     return new EllipticCurve(
         new BigInteger("fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f", 16),
         new BigInteger("0000000000000000000000000000000000000000000000000000000000000000", 16),
